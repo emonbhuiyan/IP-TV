@@ -1,0 +1,98 @@
+#EXTM3U
+#EXTINF:0,COLORS BANGLA
+http://172.16.29.2:8090/hls/ColorsBanglaHD.m3u8
+#EXTINF:30,STAR JALSHA
+http://172.16.29.2:8090/hls/StarJalshaHD.m3u8
+#EXTINF:0,ZEE BANGLA
+http://172.16.29.2:8090/hls/ZeeBanglaHD.m3u8
+#EXTINF:0,JALSHA MOVIES
+http://172.16.29.2:8090/hls/JalshaMoviesHD.m3u8
+#EXTINF:0,ZEE BANGLA CINEMA
+http://172.16.29.2:8090/hls/ZeeBanglaCinemaHD.m3u8
+#EXTINF:0,SONY AATH
+http://172.16.29.2:8090/hls/SonyAtth.m3u8
+#EXTINF:30,ENTER10 BANGLA
+http://172.16.29.2:8090/hls/Enter10Bangla.m3u8
+#EXTINF:30,GTV
+http://172.16.29.2:8090/hls/gazitvhd.m3u8
+#EXTINF:30,JAMUNA TV
+http://172.16.29.2:8090/hls/JamunaTV.m3u8
+#EXTINF:0,SOMOY TV
+http://172.16.29.2:8090/hls/somoytv.m3u8
+#EXTINF:0,CHANNEL I
+http://172.16.29.2:8090/hls/channelihd.m3u8
+#EXTINF:0,ATN NEWS
+http://172.16.29.2:8090/hls/AtnNews.m3u8
+#EXTINF:30,SONY HD
+http://172.16.29.2:8090/hls/SonyHD.m3u8
+#EXTINF:30,ZEE TV HD
+http://172.16.29.2:8090/hls/ZeeTVHD.m3u8
+#EXTINF:0,COLORS HD
+http://172.16.29.2:8090/hls/ColorsHD.m3u8
+#EXTINF:30,STAR PLUS
+http://172.16.29.2:8090/hls/StarPlusHD.m3u8
+#EXTINF:0,ZEE CINEMA
+http://172.16.29.2:8090/hls/ZeeCinemaHD.m3u8
+#EXTINF:0,STAR GOLD
+http://172.16.29.2:8090/hls/StarGoldHD.m3u8
+#EXTINF:0,SONY MAX
+http://172.16.29.2:8090/hls/sonymaxhd.m3u8
+#EXTINF:30,STAR MOVIES
+http://172.16.29.2:8090/hls/StarMoviesHD.m3u8
+#EXTINF:30,COLORS CINEPLEX
+http://172.16.29.2:8090/hls/ColorsCineplexHD.m3u8
+#EXTINF:30,DISCOVERY KIDS
+http://172.16.29.2:8090/hls/DiscoveryKids.m3u8
+#EXTINF:30,CARTOON NETWORK
+http://172.16.29.2:8090/hls/CartoonNetworkHD.m3u8
+#EXTINF:0,NAT GEO WILD
+http://172.16.29.2:8090/hls/NatGeoWild.m3u8
+#EXTINF:0,DISCOVERY
+http://172.16.29.2:8090/hls/DiscoveryHD.m3u8
+#EXTINF:0,ANIMAL PLANET
+http://172.16.29.2:8090/hls/AnimalPlanetHD.m3u8
+#EXTINF:30,T SPORTS
+http://172.16.29.2:8090/hls/tsportshd.m3u8
+#EXTINF:30,A SPORTS
+http://172.16.29.2:8090/hls/ASportsHD.m3u8
+#EXTINF:30,WILLOW CRICKET
+http://172.16.29.2:8090/hls/WillowCricket2HD.m3u8
+#EXTINF:48,WILLOW CRICKET 2
+http://172.16.29.2:8090/hls/willowcrickethd.m3u8
+#EXTINF:30,STAR SPORTS 
+http://172.16.29.2:8090/hls/StarSportsHindi2HD.m3u8
+#EXTINF:0,STAR SPORTS 1
+http://172.16.29.2:8090/hls/StarSports1HD.m3u8
+#EXTINF:0,STAR SPORTS 2
+http://172.16.29.2:8090/hls/StarSports2HD.m3u8
+#EXTINF:0,SONY TEN 1
+http://172.16.29.2:8090/hls/SonyTen1hd.m3u8
+#EXTINF:0,SONY TEN 2
+http://172.16.29.2:8090/hls/SonyTen2hd.m3u8
+#EXTINF:0,SONY TEN 3
+http://172.16.29.2:8090/hls/SonyTen3hd.m3u8
+#EXTINF:0,SONY TEN 5
+http://172.16.29.2:8090/hls/SonyTen5HD.m3u8
+#EXTINF:30,STAR SPORTS SELECT
+http://172.16.29.2:8090/hls/StarSportsSelect1HD.m3u8
+#EXTINF:0,STAR SPORTS SELECT 2
+http://172.16.29.2:8090/hls/StarSportsSelect2HD.m3u8#EXTINF:0,SPORTS LIVE
+http://172.16.29.2:8090/hls/sportsliveevents.m3u8
+#EXTINF:36,XTREAM SPORTS
+http://172.16.29.2:8090/hls/xtreamsports.m3u8
+#EXTINF:30,EUROSPORTS
+http://172.16.29.2:8090/hls/eurosportshd.m3u8
+#EXTINF:36,FUBO SPORTS
+http://172.16.29.2:8090/hls/fubosports.m3u8
+#EXTINF:68,DD SPORTS
+http://172.16.29.2:8090/hls/ddsports.m3u8
+#EXTINF:35,WORLD FREE SPORTS
+http://172.16.29.2:8090/hls/WorldofFreeSports.m3u8
+#EXTINF:0,ALJAZEERA NEWS
+http://172.16.29.2:8090/hls/ALjazeeraNews.m3u8
+#EXTINF:0,BBC WORLD
+http://172.16.29.2:8090/hls/bbc_world.m3u8
+#EXTINF:0,BBC EARTH
+http://172.16.29.2:8090/hls/bbcearthhd.m3u8
+#EXTINF:0,SANGEET BANGLA
+http://172.16.29.2:8090/hls/SangeetBangla.m3u8
