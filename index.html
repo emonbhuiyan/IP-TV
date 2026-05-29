@@ -3,240 +3,80 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
 <title>IPTV Player</title>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"/>
+<script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
-
-body{
-    font-family:Arial, Helvetica, sans-serif;
-    background:#0f172a;
-    color:#fff;
-    overflow:hidden;
-}
-
-.app{
-    display:flex;
-    height:100vh;
-}
-
-/* Sidebar */
-
-.sidebar{
-    width:360px;
-    background:#111827;
-    border-right:1px solid rgba(255,255,255,0.08);
-    display:flex;
-    flex-direction:column;
-}
-
-.logo{
-    padding:18px;
-    font-size:22px;
-    font-weight:700;
-    border-bottom:1px solid rgba(255,255,255,0.08);
-}
-
-.search-box{
-    padding:14px;
-    border-bottom:1px solid rgba(255,255,255,0.08);
-}
-
-.search-box input{
-    width:100%;
-    background:#1e293b;
-    border:none;
-    outline:none;
-    color:#fff;
-    padding:13px 14px;
-    border-radius:10px;
-    font-size:14px;
-}
-
-.categories{
-    display:flex;
-    gap:8px;
-    overflow-x:auto;
-    padding:12px;
-    border-bottom:1px solid rgba(255,255,255,0.08);
-}
-
-.categories::-webkit-scrollbar{
-    height:5px;
-}
-
-.categories button{
-    border:none;
-    background:#1e293b;
-    color:#fff;
-    padding:10px 14px;
-    border-radius:8px;
-    cursor:pointer;
-    white-space:nowrap;
-    font-size:13px;
-}
-
-.categories button.active{
-    background:#2563eb;
-}
-
-.channel-list{
-    overflow-y:auto;
-    flex:1;
-}
-
-.channel{
-    display:flex;
-    align-items:center;
-    gap:12px;
-    padding:12px;
-    border-bottom:1px solid rgba(255,255,255,0.05);
-    cursor:pointer;
-    transition:0.2s;
-}
-
-.channel:hover{
-    background:#1e293b;
-}
-
-.channel.active{
-    background:#1d4ed8;
-}
-
-.channel img{
-    width:55px;
-    height:55px;
-    object-fit:contain;
-    background:#fff;
-    border-radius:10px;
-    padding:4px;
-    flex-shrink:0;
-}
-
-.channel-details{
-    overflow:hidden;
-}
-
-.channel-name{
-    font-size:14px;
-    font-weight:600;
-    white-space:nowrap;
-    overflow:hidden;
-    text-overflow:ellipsis;
-}
-
-.channel-category{
-    font-size:12px;
-    opacity:0.7;
-    margin-top:4px;
-}
-
-/* Player */
-
-.player-area{
-    flex:1;
-    display:flex;
-    flex-direction:column;
-    background:#000;
-}
-
-.video-wrapper{
-    flex:1;
-    background:#000;
-}
-
-video{
-    width:100%;
-    height:100%;
-    background:#000;
-}
-
-.player-info{
-    background:#111827;
-    border-top:1px solid rgba(255,255,255,0.08);
-    padding:16px 20px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-}
-
-.player-info h2{
-    font-size:18px;
-}
-
-/* Mobile */
-
-@media(max-width:900px){
-
-    body{
-        overflow:auto;
+    /* Hide scrollbar for categories but keep functionality */
+    .hide-scrollbar::-webkit-scrollbar {
+        display: none;
     }
-
-    .app{
-        flex-direction:column;
-        height:auto;
+    .hide-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
     }
-
-    .sidebar{
-        width:100%;
-        height:55vh;
+    
+    /* Smooth scroll for the channel list */
+    .custom-scrollbar::-webkit-scrollbar {
+        width: 6px;
     }
-
-    .player-area{
-        height:45vh;
+    .custom-scrollbar::-webkit-scrollbar-track {
+        background: transparent;
     }
-
-}
-
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        background-color: #334155;
+        border-radius: 10px;
+    }
 </style>
 </head>
 
-<body>
+<body class="bg-slate-950 text-slate-100 font-sans overflow-hidden w-screen h-screen flex flex-col md:flex-row">
 
-<div class="app">
-
-    <div class="sidebar">
-
-        <div class="logo">
-            IPTV Player
+    <aside class="w-full md:w-96 bg-slate-900 border-r border-slate-800 flex flex-col h-[55vh] md:h-screen order-2 md:order-1 z-10">
+        
+        <div class="p-4 border-b border-slate-800 shrink-0">
+            <h1 class="text-xl font-bold text-white mb-4 tracking-tight">IPTV Player</h1>
+            <div class="relative">
+                <input 
+                    type="text" 
+                    id="searchInput" 
+                    placeholder="Search channels..."
+                    class="w-full bg-slate-950 border border-slate-700 text-slate-200 text-sm rounded-xl px-4 py-2.5 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
+                >
+            </div>
         </div>
 
-        <div class="search-box">
-            <input type="text" id="searchInput" placeholder="Search channels...">
+        <div class="border-b border-slate-800 p-3 shrink-0">
+            <div id="categories" class="flex gap-2 overflow-x-auto hide-scrollbar scroll-smooth snap-x">
+                </div>
         </div>
 
-        <div class="categories" id="categories"></div>
+        <div id="channelList" class="flex-1 overflow-y-auto custom-scrollbar bg-slate-900/50">
+            </div>
 
-        <div class="channel-list" id="channelList"></div>
+    </aside>
 
-    </div>
-
-    <div class="player-area">
-
-        <div class="video-wrapper">
-            <video id="video" controls autoplay playsinline></video>
+    <main class="flex-1 flex flex-col h-[45vh] md:h-screen bg-black order-1 md:order-2 relative">
+        
+        <div class="flex-1 w-full h-full bg-black relative">
+            <video id="video" class="w-full h-full object-contain" controls autoplay playsinline></video>
         </div>
 
-        <div class="player-info">
-            <h2 id="nowPlaying">Select a Channel</h2>
-            <div id="channelCount"></div>
+        <div class="bg-slate-900 border-t border-slate-800 p-4 shrink-0 flex justify-between items-center">
+            <div>
+                <p class="text-xs text-blue-400 font-semibold uppercase tracking-wider mb-1">Now Playing</p>
+                <h2 id="nowPlaying" class="text-lg font-bold truncate max-w-[200px] md:max-w-md text-white">Select a Channel</h2>
+            </div>
+            <div id="channelCount" class="text-sm text-slate-400 font-medium bg-slate-800 px-3 py-1 rounded-lg">
+                Loading...
+            </div>
         </div>
 
-    </div>
-
-</div>
+    </main>
 
 <script>
-
 const PLAYLIST_URL = "https://raw.githubusercontent.com/emonbhuiyan/IP-TV/refs/heads/main/aynaott.m3u";
 
 const video = document.getElementById("video");
@@ -249,256 +89,69 @@ const channelCount = document.getElementById("channelCount");
 let channels = [];
 let currentCategory = "All";
 
-/* ---------- CATEGORY ORDER ---------- */
-
 const categoryOrder = [
-    "All",
-    "Bangla TV",
-    "Bangla News",
-    "Bangla India",
-    "Sports",
-    "Movies",
-    "Kids",
-    "International News",
-    "Hindi",
-    "Music",
-    "Documentary",
-    "Travel & Lifestyle",
-    "Religious",
-    "Weather",
-    "General TV"
+    "All", "Bangla TV", "Bangla News", "Bangla India", "Sports", 
+    "Movies", "Kids", "International News", "Hindi", "Music", 
+    "Documentary", "Travel & Lifestyle", "Religious", "Weather", "General TV"
 ];
 
-/* ---------- MANUAL CATEGORY FIX ---------- */
-
 function getCategory(name, group){
-
     const lowerName = name.toLowerCase();
     const lowerGroup = group.toLowerCase();
 
-    /* Bangla News */
+    const banglaNews = ["somoy", "jamuna", "ekattor", "independent", "channel 24", "ekhontv", "news24", "dbc", "atn news", "abc news"];
+    const banglaIndia = ["zee bangla", "star jalsha", "colors bangla", "sony aath", "dd bangla", "enter 10 bangla"];
+    const sports = ["sports", "espn", "tsports", "ptv", "willow", "star sports", "nfl", "fox sports", "fifa", "golf", "cricket", "sports grid", "sports network", "tsn"];
+    const movies = ["hbo", "fx", "movie", "moviesphere", "amc", "srk", "epix", "action hollywood"];
+    const kids = ["cartoon", "disney", "nick", "kids", "moonbug", "ytv"];
+    const music = ["music", "jalwa", "tashan", "party universe", "powerturk", "sangeet"];
+    const religious = ["islam", "peace tv", "madani", "eman", "deen", "religious"];
+    const weather = ["weather", "accuweather"];
+    const documentary = ["nat geo", "discovery", "documentary", "world war"];
+    const travel = ["travel", "food network", "hgtv", "tlc"];
+    const hindi = ["hindi", "dangal", "shemaroo", "republic tv bharat", "goldmines"];
+    const internationalNews = ["cnn", "aljazeera", "dw", "trt", "sky news", "msnbc", "fox business", "cnbc", "wion", "oan", "nhk"];
 
-    const banglaNews = [
-        "somoy",
-        "jamuna",
-        "ekattor",
-        "independent",
-        "channel 24",
-        "ekhontv",
-        "news24",
-        "dbc",
-        "atn news",
-        "abc news"
-    ];
-
-    /* Bangla India */
-
-    const banglaIndia = [
-        "zee bangla",
-        "star jalsha",
-        "colors bangla",
-        "sony aath",
-        "dd bangla",
-        "enter 10 bangla"
-    ];
-
-    /* Sports */
-
-    const sports = [
-        "sports",
-        "espn",
-        "tsports",
-        "ptv",
-        "willow",
-        "star sports",
-        "nfl",
-        "fox sports",
-        "fifa",
-        "golf",
-        "cricket",
-        "sports grid",
-        "sports network",
-        "tsn"
-    ];
-
-    /* Movies */
-
-    const movies = [
-        "hbo",
-        "fx",
-        "movie",
-        "moviesphere",
-        "amc",
-        "srk",
-        "epix",
-        "action hollywood"
-    ];
-
-    /* Kids */
-
-    const kids = [
-        "cartoon",
-        "disney",
-        "nick",
-        "kids",
-        "moonbug",
-        "ytv"
-    ];
-
-    /* Music */
-
-    const music = [
-        "music",
-        "jalwa",
-        "tashan",
-        "party universe",
-        "powerturk",
-        "sangeet"
-    ];
-
-    /* Religious */
-
-    const religious = [
-        "islam",
-        "peace tv",
-        "madani",
-        "eman",
-        "deen",
-        "religious"
-    ];
-
-    /* Weather */
-
-    const weather = [
-        "weather",
-        "accuweather"
-    ];
-
-    /* Documentary */
-
-    const documentary = [
-        "nat geo",
-        "discovery",
-        "documentary",
-        "world war"
-    ];
-
-    /* Travel */
-
-    const travel = [
-        "travel",
-        "food network",
-        "hgtv",
-        "tlc"
-    ];
-
-    /* Hindi */
-
-    const hindi = [
-        "hindi",
-        "dangal",
-        "shemaroo",
-        "republic tv bharat",
-        "goldmines"
-    ];
-
-    /* International News */
-
-    const internationalNews = [
-        "cnn",
-        "aljazeera",
-        "dw",
-        "trt",
-        "sky news",
-        "msnbc",
-        "fox business",
-        "cnbc",
-        "wion",
-        "oan",
-        "nhk"
-    ];
-
-    if(banglaNews.some(x => lowerName.includes(x)))
-        return "Bangla News";
-
-    if(banglaIndia.some(x => lowerName.includes(x)))
-        return "Bangla India";
-
-    if(sports.some(x => lowerName.includes(x)))
-        return "Sports";
-
-    if(movies.some(x => lowerName.includes(x)))
-        return "Movies";
-
-    if(kids.some(x => lowerName.includes(x)))
-        return "Kids";
-
-    if(music.some(x => lowerName.includes(x)))
-        return "Music";
-
-    if(religious.some(x => lowerName.includes(x)))
-        return "Religious";
-
-    if(weather.some(x => lowerName.includes(x)))
-        return "Weather";
-
-    if(documentary.some(x => lowerName.includes(x)))
-        return "Documentary";
-
-    if(travel.some(x => lowerName.includes(x)))
-        return "Travel & Lifestyle";
-
-    if(hindi.some(x => lowerName.includes(x)))
-        return "Hindi";
-
-    if(internationalNews.some(x => lowerName.includes(x)))
-        return "International News";
-
-    if(
-        lowerGroup.includes("bangla") ||
-        lowerGroup.includes("banGLA") ||
-        lowerGroup.includes("inbangla")
-    ){
-        return "Bangla TV";
-    }
+    if(banglaNews.some(x => lowerName.includes(x))) return "Bangla News";
+    if(banglaIndia.some(x => lowerName.includes(x))) return "Bangla India";
+    if(sports.some(x => lowerName.includes(x))) return "Sports";
+    if(movies.some(x => lowerName.includes(x))) return "Movies";
+    if(kids.some(x => lowerName.includes(x))) return "Kids";
+    if(music.some(x => lowerName.includes(x))) return "Music";
+    if(religious.some(x => lowerName.includes(x))) return "Religious";
+    if(weather.some(x => lowerName.includes(x))) return "Weather";
+    if(documentary.some(x => lowerName.includes(x))) return "Documentary";
+    if(travel.some(x => lowerName.includes(x))) return "Travel & Lifestyle";
+    if(hindi.some(x => lowerName.includes(x))) return "Hindi";
+    if(internationalNews.some(x => lowerName.includes(x))) return "International News";
+    if(lowerGroup.includes("bangla") || lowerGroup.includes("inbangla")) return "Bangla TV";
 
     return "General TV";
 }
 
-/* ---------- LOAD PLAYLIST ---------- */
-
 async function loadPlaylist(){
-
-    const response = await fetch(PLAYLIST_URL);
-    const text = await response.text();
-
-    parsePlaylist(text);
-
-    renderCategories();
-    renderChannels();
+    try {
+        const response = await fetch(PLAYLIST_URL);
+        const text = await response.text();
+        parsePlaylist(text);
+        renderCategories();
+        renderChannels();
+    } catch (error) {
+        console.error("Failed to load playlist", error);
+        channelCount.innerText = "Error loading list";
+    }
 }
 
-/* ---------- PARSE M3U ---------- */
-
 function parsePlaylist(data){
-
     const lines = data.split("\n");
-
     for(let i = 0; i < lines.length; i++){
-
         const line = lines[i].trim();
-
         if(line.startsWith("#EXTINF")){
-
             const url = lines[i + 1]?.trim();
-
             const logoMatch = line.match(/tvg-logo="(.*?)"/);
             const groupMatch = line.match(/group-title="(.*?)"/);
-
             const name = line.split(",").pop().trim();
-
             const group = groupMatch ? groupMatch[1] : "Other";
-
             const category = getCategory(name, group);
 
             channels.push({
@@ -510,87 +163,75 @@ function parsePlaylist(data){
             });
         }
     }
-
     channelCount.innerText = `${channels.length} Channels`;
 }
 
-/* ---------- RENDER CATEGORIES ---------- */
-
 function renderCategories(){
-
     categoriesContainer.innerHTML = "";
 
     categoryOrder.forEach(category => {
-
-        const exists = channels.some(
-            c => c.category === category
-        );
-
-        if(category !== "All" && !exists)
-            return;
+        const exists = channels.some(c => c.category === category);
+        if(category !== "All" && !exists) return;
 
         const btn = document.createElement("button");
-
         btn.innerText = category;
-
-        if(category === currentCategory){
-            btn.classList.add("active");
-        }
+        
+        // Tailwind Capsule Styling
+        btn.className = `whitespace-nowrap px-4 py-1.5 rounded-full text-sm font-medium transition-all snap-start shadow-sm border ${
+            category === currentCategory 
+            ? "bg-blue-600 text-white border-blue-500 hover:bg-blue-500" 
+            : "bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-700 hover:text-white"
+        }`;
 
         btn.onclick = () => {
             currentCategory = category;
             renderCategories();
             renderChannels();
+            // Scroll category list smoothly to center the active button if desired
+            btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
         };
 
         categoriesContainer.appendChild(btn);
     });
 }
 
-/* ---------- RENDER CHANNELS ---------- */
-
 function renderChannels(){
-
     channelList.innerHTML = "";
-
     const search = searchInput.value.toLowerCase();
 
     const filtered = channels.filter(channel => {
-
-        const categoryMatch =
-            currentCategory === "All" ||
-            channel.category === currentCategory;
-
-        const searchMatch =
-            channel.name.toLowerCase().includes(search);
-
+        const categoryMatch = currentCategory === "All" || channel.category === currentCategory;
+        const searchMatch = channel.name.toLowerCase().includes(search);
         return categoryMatch && searchMatch;
     });
 
-    filtered.forEach((channel,index) => {
-
+    filtered.forEach((channel, index) => {
         const item = document.createElement("div");
-
-        item.className = "channel";
-
+        
+        // Base Tailwind styling for channel item
+        item.className = "flex items-center gap-3 p-3 cursor-pointer transition-colors border-b border-slate-800/50 hover:bg-slate-800 group channel-item";
+        
         item.innerHTML = `
-            <img loading="lazy" src="${channel.logo}" alt="${channel.name}">
-            <div class="channel-details">
-                <div class="channel-name">${channel.name}</div>
-                <div class="channel-category">${channel.category}</div>
+            <div class="w-12 h-12 shrink-0 bg-slate-100 rounded-lg p-1 flex items-center justify-center overflow-hidden">
+                <img loading="lazy" src="${channel.logo}" alt="${channel.name}" class="max-w-full max-h-full object-contain" onerror="this.style.display='none'">
+            </div>
+            <div class="flex-1 overflow-hidden">
+                <div class="text-sm font-semibold text-slate-100 truncate group-hover:text-blue-400 transition-colors">${channel.name}</div>
+                <div class="text-xs text-slate-500 mt-0.5 truncate">${channel.category}</div>
             </div>
         `;
 
         item.onclick = () => {
-
-            document.querySelectorAll(".channel").forEach(c=>{
-                c.classList.remove("active");
+            document.querySelectorAll(".channel-item").forEach(c => {
+                c.classList.remove("bg-blue-900/20", "border-l-4", "border-l-blue-500", "pl-2");
+                c.classList.add("border-b", "p-3");
             });
 
-            item.classList.add("active");
+            // Active state styling
+            item.classList.remove("border-b", "p-3");
+            item.classList.add("bg-blue-900/20", "border-l-4", "border-l-blue-500", "p-3", "pl-2");
 
             playChannel(channel);
-
         };
 
         channelList.appendChild(item);
@@ -598,43 +239,28 @@ function renderChannels(){
         if(index === 0 && !video.src){
             item.click();
         }
-
     });
 }
 
-/* ---------- PLAY CHANNEL ---------- */
-
 function playChannel(channel){
-
     nowPlaying.innerText = channel.name;
 
     if(Hls.isSupported()){
-
         if(window.hls){
             window.hls.destroy();
         }
-
         const hls = new Hls();
-
         hls.loadSource(channel.url);
         hls.attachMedia(video);
-
         window.hls = hls;
-
-    }else if(video.canPlayType("application/vnd.apple.mpegurl")){
-
+    } else if(video.canPlayType("application/vnd.apple.mpegurl")){
         video.src = channel.url;
     }
 }
 
-/* ---------- SEARCH ---------- */
-
 searchInput.addEventListener("input", renderChannels);
 
-/* ---------- START ---------- */
-
 loadPlaylist();
-
 </script>
 
 </body>
